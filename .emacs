@@ -42,16 +42,16 @@
 
 ;; Bind hippie-expand to M-/
 (global-set-key "\M-/" 'hippie-expand)
-(setq hippie-expand-try-functions-list 
-      '(try-expand-dabbrev 
-	try-expand-dabbrev-all-buffers 
-	try-expand-dabbrev-from-kill 
-	try-complete-file-name-partially 
-	try-complete-file-name 
-	try-expand-all-abbrevs 
-	try-expand-list 
-	try-expand-line 
-	try-complete-lisp-symbol-partially 
+(setq hippie-expand-try-functions-list
+      '(try-expand-dabbrev
+	try-expand-dabbrev-all-buffers
+	try-expand-dabbrev-from-kill
+	try-complete-file-name-partially
+	try-complete-file-name
+	try-expand-all-abbrevs
+	try-expand-list
+	try-expand-line
+	try-complete-lisp-symbol-partially
 	try-complete-lisp-symbol))
 
 ;; Go mode.
@@ -180,6 +180,7 @@
 (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'clojure-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'nrepl-mode-hook (lambda () (paredit-mode +1)))
 
 ;; (defun override-slime-repl-bindings-with-paredit ()
 ;;   (define-key slime-repl-mode-map
@@ -223,8 +224,13 @@
 	 (split-text (split-string text "\n"))
 	 (process-connection-type nil)
 	 (proc (start-process "pbcopy" nil "pbcopy")))
-    (process-send-string proc (concat "    \n" (mapconcat 'identity
-							  (map 'list (lambda (str)
-								       (concat "    " str))
-							       split-text) "\n")))
+    (process-send-string proc (concat "    \n"
+				      (mapconcat 'identity
+						 (map 'list
+						      (lambda (str)
+							(concat "    " str))
+						      split-text) "\n")))
     (process-send-eof proc)))
+
+;; Clojure REPL interaction.
+(require 'nrepl)
