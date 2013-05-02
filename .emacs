@@ -171,7 +171,7 @@
 (add-hook 'csharp-mode-hook 'set-csharp-mode-tabs)
 
 ;; R mode.
-;; (load "~/.emacs.d/ess-12.04-4/lisp/ess-site")
+(load "~/.emacs.d/ess-12.04-4/lisp/ess-site")
 
 ;; Paredit mode stuff.
 (autoload 'paredit-mode "paredit")
@@ -190,6 +190,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes (quote ("7d25b55a701e503d161a74a0ce0b853d7f1c9e226135e60a469f7061b1c7e914" default)))
  '(send-mail-function (quote smtpmail-send-it)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -234,3 +235,50 @@
 
 ;; Clojure REPL interaction.
 (require 'nrepl)
+(setq nrepl-popup-stacktraces nil)
+
+;; Earmuff Lisp globals/dynamics/whatever.
+;; Mostly from http://inclojurewetrust.blogspot.com/2011/11/earmuffs-and-variables.html, so thanks to that dude.
+(defun earmuffy (&optional arg)
+  (interactive "P")
+  (let* ((variable (thing-at-point 'sexp))
+	 (bounds (bounds-of-thing-at-point 'sexp))
+	 (current-point (point))
+	 (earmuffed-variable (concat "*" variable "*")))
+    (save-excursion)
+    (kill-region (car bounds) (cdr bounds))
+    (if (and (string-equal (substring variable 0 1) "*")
+	     (string-equal (substring variable (- 1)) "*"))
+	;; unearmuffy
+	(progn
+	  (insert (substring variable 1 (- (length variable) 1)))
+	  (goto-char (- current-point 1)))
+      ;; earmuffy
+      (progn
+	(insert earmuffed-variable)
+	(goto-char (+ current-point 1))))))
+
+;; Git gutter.
+;; (require 'git-gutter-fringe)
+;; (global-git-gutter-mode t)
+
+;; Tuareg mode.
+(add-to-list 'load-path "~/.emacs.d/tuareg-mode")
+(autoload 'tuareg-mode "tuareg.el" "Major mode for editing Caml code" t)
+(autoload 'camldebug "camldebug.el" "Run the Caml debugger" t)
+ (setq auto-mode-alist 
+       (append '(("\\.ml[ily]?$" . tuareg-mode)
+		 ("\\.topml$" . tuareg-mode))
+	       auto-mode-alist))
+
+;; Deep Thought color theme.
+;; (load-theme 'deep-thought)
+
+;; Easier window-moving controls.
+(global-set-key (kbd "C-c b") 'windmove-left)
+(global-set-key (kbd "C-c f") 'windmove-right)
+(global-set-key (kbd "C-c p") 'windmove-up)
+(global-set-key (kbd "C-c n") 'windmove-down)
+
+;; Rust mode.
+(require 'rust-mode)
