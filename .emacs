@@ -171,7 +171,7 @@
 (add-hook 'csharp-mode-hook 'set-csharp-mode-tabs)
 
 ;; R mode.
-(load "~/.emacs.d/ess-12.04-4/lisp/ess-site")
+;; (load "~/.emacs.d/ess-12.04-4/lisp/ess-site")
 
 ;; Paredit mode stuff.
 (autoload 'paredit-mode "paredit")
