@@ -4,9 +4,34 @@
 (add-to-list 'load-path "~/.emacs.d/")
 (package-initialize)
 
-;; Zenburn prettiness.
-;; (require 'color-theme-zenburn)
-;; (color-theme-zenburn)
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
+;; Install all the things.
+(defconst packages-to-install
+  '(coffee-mode
+    flycheck
+    magit
+    markdown-mode
+    yaml-mode
+    zenburn-theme
+    paredit
+    linum
+    undo-tree
+    go-mode
+    clojure-mode
+    nrepl
+    haskell-mode
+    rainbow-delimiters))
+
+;; Get all the packages.
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+
+(dolist (package packages-to-install)
+  (when (not (package-installed-p package))
+      (package-install package)))
 
 ;; Line numbering.
 (require 'linum)
@@ -65,16 +90,11 @@
 ;; (require 'slime)
 ;; (slime-setup)
 
-;; Chicken Scheme for Scheming.
+;; Racket for Scheming.
 (setq scheme-program-name "racket")
 
 ;; Occur for useful regex searching.
 (global-set-key (kbd "C-c o") 'occur)
-
-;; Cflow mode.
-(autoload 'cflow-mode "cflow-mode")
-(setq auto-mode-alist (append auto-mode-alist
-			      '(("\\.cflow$" . cflow-mode))))
 
 ;; 4 space tabs in ObjC mode.
 (add-hook 'objc-mode-hook
@@ -125,14 +145,7 @@
 
 (add-hook 'find-file-hook 'my-find-proper-mode)
 
-;; SASS for CSS.
-(setq exec-path (cons (expand-file-name "~/.gem/ruby/1.8/bin") exec-path))
-;(add-to-list 'load-path (expand-file-name "~/.emacs.d/scss-mode.el")
-(autoload 'scss-mode "scss-mode")
-(add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
-
 ;; Haskell mode.
-(load "~/.emacs.d/haskell/haskell-site-file")
 (add-hook 'haskell-mode-hook
 	  (lambda ()
 	    (turn-on-haskell-doc-mode)
@@ -152,28 +165,18 @@
   (tty-set-up-initial-frame-faces))
 (put 'upcase-region 'disabled nil)
 
-;; Bind C-c l to open up Clojure in another window.
-;; (defun open-clojure ()
-;;   (interactive)
-;;   (switch-to-buffer-other-window "clojure")
-;;   (run-lisp))
-
-;; (add-hook 'clojure-mode-hook
-;; 	  (lambda ()
-;; 	    (global-set-key (kbd "C-c l") 'open-clojure)))
-
 ;; C# mode.
-(autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
-(setq auto-mode-alist
-      (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
+;; (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
+;; (setq auto-mode-alist
+;;       (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
 
-(defun set-csharp-mode-tabs ()
-  (require 'flymake)
-  (setq indent-tabs-mode t)
-  (c-set-style "C#")
-  (setq c-basic-offset 8)
-  (setq tab-width 8))
-(add-hook 'csharp-mode-hook 'set-csharp-mode-tabs)
+;; (defun set-csharp-mode-tabs ()
+;;   (require 'flymake)
+;;   (setq indent-tabs-mode t)
+;;   (c-set-style "C#")
+;;   (setq c-basic-offset 8)
+;;   (setq tab-width 8))
+;; (add-hook 'csharp-mode-hook 'set-csharp-mode-tabs)
 
 ;; R mode.
 ;; (load "~/.emacs.d/ess-12.04-4/lisp/ess-site")
@@ -191,19 +194,6 @@
 ;; (defun override-slime-repl-bindings-with-paredit ()
 ;;   (define-key slime-repl-mode-map
 ;;     (read-kbd-macro paredit-backward-delete-key) nil))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("7d25b55a701e503d161a74a0ce0b853d7f1c9e226135e60a469f7061b1c7e914" default)))
- '(send-mail-function (quote smtpmail-send-it)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 ;; Turn off the menu bar.
 (menu-bar-mode -1)
@@ -264,30 +254,11 @@
 	(insert earmuffed-variable)
 	(goto-char (+ current-point 1))))))
 
-;; Git gutter.
-;; (require 'git-gutter-fringe)
-;; (global-git-gutter-mode t)
-
-;; Tuareg mode.
-(add-to-list 'load-path "~/.emacs.d/tuareg-mode")
-(autoload 'tuareg-mode "tuareg.el" "Major mode for editing Caml code" t)
-(autoload 'camldebug "camldebug.el" "Run the Caml debugger" t)
- (setq auto-mode-alist 
-       (append '(("\\.ml[ily]?$" . tuareg-mode)
-		 ("\\.topml$" . tuareg-mode))
-	       auto-mode-alist))
-
-;; Deep Thought color theme.
-;; (load-theme 'deep-thought)
-
 ;; Easier window-moving controls.
 (global-set-key (kbd "C-c b") 'windmove-left)
 (global-set-key (kbd "C-c f") 'windmove-right)
 (global-set-key (kbd "C-c p") 'windmove-up)
 (global-set-key (kbd "C-c n") 'windmove-down)
-
-;; Rust mode.
-(require 'rust-mode)
 
 ;; Bind align regexp to C-x a r
 (global-set-key (kbd "C-x a r") 'align-regexp)
@@ -301,67 +272,12 @@
 ;; Conform with edX Coffeescript tab style.
 (setq coffee-tab-width 2)
 
-;; Make sure there are newlines at the end of files.
-(setq require-final-newline t)
-
-;; Get all the packages.
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
-
-;; MMM setup.
-;; (add-to-list 'load-path "~/.emacs.d/elpa/mmm-mode-20130504.751/")
-;; (require 'mmm-auto)
-;; (setq mmm-global-mode 'maybe)
-
-;; MMM Mako mode setup.
-;; (load "mmm-mako.el")
-;; (add-to-list 'auto-mode-alist '("\\.mako\\'" . html-mode))
-;; (mmm-add-mode-ext-class 'html-mode "\\.mako\\'" 'mako)
-
 ;; Keep tabs out forever.
 (setq-default indent-tabs-mode nil)
 
-;; Flychecking.
-;; (add-hook 'global-init-hook #'global-flycheck-mode)
-;; (add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
-;; (require 'flycheck)
-
-;; (flycheck-declare-checker my-python-checker
-;;   "my-python-checker"
-;;   :command '("flake8" "--max-complexity=12" source)
-;;   :error-patterns
-;;   '(("^\\(?1:.*\\):\\(?2:[0-9]+\\): \\(?4:[[:alpha:]]\\{2\\}.*\\)$" error)
-;;     ("^\\(?1:.*?\\):\\(?2:[0-9]+\\):\\(?:\\(?3:[0-9]*\\):?\\) \\(?4:E12[0-9].*\\)$" warning)
-;;     ("^\\(?1:.*?\\):\\(?2:[0-9]+\\):\\(?:\\(?3:[0-9]*\\):?\\) \\(?4:E[2-7].*\\)$" warning)
-;;     ("^\\(?1:.*?\\):\\(?2:[0-9]+\\):\\(?:\\(?3:[0-9]*\\):?\\) \\(?4:E[0-9]+.*\\)$" error)
-;;     ("^\\(?1:.*?\\):\\(?2:[0-9]+\\):\\(?:\\(?3:[0-9]*\\):?\\) \\(?4:W8[0-9]+.*\\)$" error)
-;;     ("^\\(?1:.*?\\):\\(?2:[0-9]+\\):\\(?:\\(?3:[0-9]*\\):?\\) \\(?4:W[0-9]+.*\\)$" warning))
-;;   :modes 'python-mode
-;;   :next-checkers '(python-pylint))
-
-;; (add-to-list 'flycheck-checkers 'my-python-checker)
-
-;; (defun flycheck-toggle-python-checker ()
-;;   (interactive)
-;;   (if (and (boundp 'flycheck-checker)
-;;            (equal (symbol-name (symbol-value 'flycheck-checker))
-;;                   "python-pylint"))
-;;       (setq flycheck-checker 'my-python-checker)
-;;     (setq flycheck-checker 'python-pylint))
-;;   (message (format "Using %s" (symbol-name (symbol-value 'flycheck-checker))))
-;;   (flycheck-buffer))
-
-;; (add-hook 'python-mode-hook
-;;           (lambda ()
-;;             (flycheck-mode t)
-;;             (define-key python-mode-map (kbd "C-c '") 'flycheck-toggle-python-checker)
-;;             (define-key python-mode-map (kbd  "C-c C-n") 'flycheck-next-error)
-;;             (define-key python-mode-map (kbd  "C-c C-p") 'flycheck-previous-error)))
-
 ;; Yaml.
-;; (require 'yaml-mode)
-;; (add-to-list 'auto-mode-alist '("\\.ya?ml$" . yaml-mode))
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.ya?ml$" . yaml-mode))
 
 ;; Make special file names use the right language mode.
 (add-to-list 'auto-mode-alist '("^Cakefile$" . coffee-mode))
@@ -405,7 +321,7 @@
             (princ (concat buffer "\n"))))
       (minibuffer-message "No unsaved buffers!"))))
 
-;; Bind M-p to delete around word.
+;; Bind C-c d to delete around word.
 (defun delete-around-word (&optional arg)
   (interactive)
   (let ((bounds (bounds-of-thing-at-point 'sexp)))
@@ -419,12 +335,3 @@
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-
-;; TODO: Actually use this to install packages.
-(defconst packages-to-install
-  '('coffee-mode
-    'flycheck-mode
-    'magit
-    'markdown-mode
-    'sr-speedbar
-    'yaml-mode))
