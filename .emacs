@@ -131,8 +131,11 @@
 
 ;; Haskell mode.
 (load "~/.emacs.d/haskell/haskell-site-file")
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+(add-hook 'haskell-mode-hook
+	  (lambda ()
+	    (turn-on-haskell-doc-mode)
+	    (turn-on-haskell-indentation)
+	    (setq require-final-newline t)))
 
 ;; Coffeescript mode.
 (add-to-list 'load-path "~/.emacs.d/vendor/coffee-mode")
@@ -282,3 +285,9 @@
 
 ;; Rust mode.
 (require 'rust-mode)
+
+;; Bind align regexp to C-x a r
+(global-set-key (kbd "C-x a r") 'align-regexp)
+
+;; Always require a final newline.
+(setq require-final-newline t)
