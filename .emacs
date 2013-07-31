@@ -1,11 +1,12 @@
 ;; Totally my .emacs!
 
-;; load-path
+;; Load stuff up.
 (add-to-list 'load-path "~/.emacs.d/")
+(package-initialize)
 
 ;; Zenburn prettiness.
-(require 'color-theme-zenburn)
-(color-theme-zenburn)
+;; (require 'color-theme-zenburn)
+;; (color-theme-zenburn)
 
 ;; Line numbering.
 (require 'linum)
@@ -36,6 +37,7 @@
 ;; RAINBOW parentheses!
 (require 'rainbow-delimiters)
 (add-hook 'scheme-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'inferior-scheme-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
@@ -58,13 +60,13 @@
 (require 'go-mode-load)
 
 ;; Common Lisp mode.
-(add-to-list 'load-path "~/.emacs.d/slime-2012-03-05/")
-(setq inferior-lisp-program "/usr/local/bin/lisp")
-(require 'slime)
-(slime-setup)
+;; (add-to-list 'load-path "~/.emacs.d/slime-2012-03-05/")
+;; (setq inferior-lisp-program "/usr/local/bin/lisp")
+;; (require 'slime)
+;; (slime-setup)
 
 ;; Chicken Scheme for Scheming.
-(setq scheme-program-name "csi -:c")
+(setq scheme-program-name "racket")
 
 ;; Occur for useful regex searching.
 (global-set-key (kbd "C-c o") 'occur)
@@ -99,7 +101,7 @@
 ;; need find-file to do this
 (require 'find-file)
 ;; find-file doesn't grok objc files for some reason, add that
-(push ".m" (cadr (assoc "\\.h\\'" cc-other-file-alist)))
+;; (push ".m" (cadr (assoc "\\.h\\" cc-other-file-alist)))
 
 (defun my-find-proper-mode ()
   (interactive)
@@ -138,8 +140,8 @@
 	    (setq require-final-newline t)))
 
 ;; Coffeescript mode.
-(add-to-list 'load-path "~/.emacs.d/vendor/coffee-mode")
-(require 'coffee-mode)
+;; (add-to-list 'load-path "~/.emacs.d/vendor/coffee-mode")
+;; (require 'coffee-mode)
 
 ;; Clojure mode.
 (require 'clojure-mode)
@@ -180,6 +182,7 @@
 (autoload 'paredit-mode "paredit")
 (add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'scheme-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'inferior-scheme-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'clojure-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
@@ -291,3 +294,137 @@
 
 ;; Always require a final newline.
 (setq require-final-newline t)
+
+;; Zenburn 2: color theme boogaloo
+(load-theme 'zenburn t)
+
+;; Conform with edX Coffeescript tab style.
+(setq coffee-tab-width 2)
+
+;; Make sure there are newlines at the end of files.
+(setq require-final-newline t)
+
+;; Get all the packages.
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+
+;; MMM setup.
+;; (add-to-list 'load-path "~/.emacs.d/elpa/mmm-mode-20130504.751/")
+;; (require 'mmm-auto)
+;; (setq mmm-global-mode 'maybe)
+
+;; MMM Mako mode setup.
+;; (load "mmm-mako.el")
+;; (add-to-list 'auto-mode-alist '("\\.mako\\'" . html-mode))
+;; (mmm-add-mode-ext-class 'html-mode "\\.mako\\'" 'mako)
+
+;; Keep tabs out forever.
+(setq-default indent-tabs-mode nil)
+
+;; Flychecking.
+;; (add-hook 'global-init-hook #'global-flycheck-mode)
+;; (add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
+;; (require 'flycheck)
+
+;; (flycheck-declare-checker my-python-checker
+;;   "my-python-checker"
+;;   :command '("flake8" "--max-complexity=12" source)
+;;   :error-patterns
+;;   '(("^\\(?1:.*\\):\\(?2:[0-9]+\\): \\(?4:[[:alpha:]]\\{2\\}.*\\)$" error)
+;;     ("^\\(?1:.*?\\):\\(?2:[0-9]+\\):\\(?:\\(?3:[0-9]*\\):?\\) \\(?4:E12[0-9].*\\)$" warning)
+;;     ("^\\(?1:.*?\\):\\(?2:[0-9]+\\):\\(?:\\(?3:[0-9]*\\):?\\) \\(?4:E[2-7].*\\)$" warning)
+;;     ("^\\(?1:.*?\\):\\(?2:[0-9]+\\):\\(?:\\(?3:[0-9]*\\):?\\) \\(?4:E[0-9]+.*\\)$" error)
+;;     ("^\\(?1:.*?\\):\\(?2:[0-9]+\\):\\(?:\\(?3:[0-9]*\\):?\\) \\(?4:W8[0-9]+.*\\)$" error)
+;;     ("^\\(?1:.*?\\):\\(?2:[0-9]+\\):\\(?:\\(?3:[0-9]*\\):?\\) \\(?4:W[0-9]+.*\\)$" warning))
+;;   :modes 'python-mode
+;;   :next-checkers '(python-pylint))
+
+;; (add-to-list 'flycheck-checkers 'my-python-checker)
+
+;; (defun flycheck-toggle-python-checker ()
+;;   (interactive)
+;;   (if (and (boundp 'flycheck-checker)
+;;            (equal (symbol-name (symbol-value 'flycheck-checker))
+;;                   "python-pylint"))
+;;       (setq flycheck-checker 'my-python-checker)
+;;     (setq flycheck-checker 'python-pylint))
+;;   (message (format "Using %s" (symbol-name (symbol-value 'flycheck-checker))))
+;;   (flycheck-buffer))
+
+;; (add-hook 'python-mode-hook
+;;           (lambda ()
+;;             (flycheck-mode t)
+;;             (define-key python-mode-map (kbd "C-c '") 'flycheck-toggle-python-checker)
+;;             (define-key python-mode-map (kbd  "C-c C-n") 'flycheck-next-error)
+;;             (define-key python-mode-map (kbd  "C-c C-p") 'flycheck-previous-error)))
+
+;; Yaml.
+;; (require 'yaml-mode)
+;; (add-to-list 'auto-mode-alist '("\\.ya?ml$" . yaml-mode))
+
+;; Make special file names use the right language mode.
+(add-to-list 'auto-mode-alist '("^Cakefile$" . coffee-mode))
+(add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("^[Rr]akefile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("^Gemfile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.underscore$" . html-mode))
+(add-to-list 'auto-mode-alist '("\\.make$" . html-mode))
+
+;; Revert all buffers.
+(defun revert-all-buffers ()
+  "Revert all open buffers, if it makes sense to do so."
+  (interactive)
+  (dolist (b (buffer-list))
+    (if (buffer-file-name b) ;; Only revert the file if it's associated with a file
+      (condition-case nil
+          (with-current-buffer b
+            (revert-buffer nil t nil))
+        (error nil))))
+  (minibuffer-message "Reverted."))
+
+(global-set-key (kbd "C-c r") 'revert-all-buffers)
+
+(defun unsaved-buffer-list ()
+  "List all unsaved buffers associated with files."
+  (reduce (lambda (acc buffer)
+            (if (and (buffer-modified-p buffer)
+                     (buffer-file-name buffer))
+                (cons (buffer-name buffer) acc)
+              acc))
+          (buffer-list)
+          :initial-value '()))
+
+(defun list-unsaved-buffers ()
+  "Show the list of unsaved buffers."
+  (interactive)
+  (let ((unsaved-list (unsaved-buffer-list)))
+    (if (> (length unsaved-list) 0)
+        (with-output-to-temp-buffer "*Unsaved buffers*"
+          (dolist (buffer unsaved-list)
+            (princ (concat buffer "\n"))))
+      (minibuffer-message "No unsaved buffers!"))))
+
+;; Bind M-p to delete around word.
+(defun delete-around-word (&optional arg)
+  (interactive)
+  (let ((bounds (bounds-of-thing-at-point 'sexp)))
+    (delete-region (car bounds) (cdr bounds))))
+
+(global-set-key (kbd "C-c d") 'delete-around-word)
+
+;; Markdown.
+(autoload 'markdown-mode "markdown-mode"
+  "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+;; TODO: Actually use this to install packages.
+(defconst packages-to-install
+  '('coffee-mode
+    'flycheck-mode
+    'magit
+    'markdown-mode
+    'sr-speedbar
+    'yaml-mode))
