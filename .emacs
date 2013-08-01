@@ -36,6 +36,7 @@
 ;; Line numbering.
 (require 'linum)
 (global-linum-mode 1)
+(setq linum-format "%d ")
 
 ;; Transient mark mode.
 (setq-default transient-mark-mode 1)
