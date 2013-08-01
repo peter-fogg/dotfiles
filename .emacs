@@ -22,7 +22,8 @@
     clojure-mode
     nrepl
     haskell-mode
-    rainbow-delimiters))
+    rainbow-delimiters
+    skewer-mode))
 
 ;; Get all the packages.
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
