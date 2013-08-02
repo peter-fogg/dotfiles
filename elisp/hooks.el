@@ -27,3 +27,6 @@
 (add-hook 'clojure-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'nrepl-mode-hook (lambda () (paredit-mode +1)))
+
+;; Skewer.
+(add-hook 'js2-mode-hook 'skewer-mode)

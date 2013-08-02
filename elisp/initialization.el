@@ -96,6 +96,9 @@
 (add-to-list 'auto-mode-alist '("\\.make$" . html-mode))
 
 ;; Markdown.
-(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.text$" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown$" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+
+;; Use JS2 mode for JS.
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
