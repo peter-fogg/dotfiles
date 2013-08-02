@@ -34,9 +34,9 @@
       (package-install package)))
 
 ;; Load up custom functions.
-(load-file "elisp/functions.el")
-(load-file "elisp/hooks.el")
-(load-file "elisp/initialization.el")
+(load-file "~/.emacs.d/elisp/functions.el")
+(load-file "~/.emacs.d/elisp/hooks.el")
+(load-file "~/.emacs.d/elisp/initialization.el")
 
 ;; The most important part of this file.
 (load-theme 'zenburn t)
