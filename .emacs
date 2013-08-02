@@ -4,8 +4,7 @@
 (add-to-list 'load-path "~/.emacs.d/")
 (package-initialize)
 
-(when (not package-archive-contents)
-  (package-refresh-contents))
+(package-refresh-contents)
 
 ;; Install all the things.
 (defconst packages-to-install
