@@ -22,7 +22,8 @@
     nrepl
     haskell-mode
     rainbow-delimiters
-    skewer-mode))
+    skewer-mode
+    scss-mode))
 
 ;; Get all the packages.
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
