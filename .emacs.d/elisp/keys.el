@@ -5,4 +5,3 @@
 
 ;; Bind align regexp to C-x a r
 (global-set-key (kbd "C-x a r") 'align-regexp)
-

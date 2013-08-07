@@ -100,8 +100,5 @@
 (add-to-list 'auto-mode-alist '("\\.markdown$" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
 
-;; Use JS2 mode for JS.
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-
 ;; Don't spam SASS compilation.
 (setq scss-compile-at-save nil)

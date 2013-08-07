@@ -22,7 +22,6 @@
     nrepl
     haskell-mode
     rainbow-delimiters
-    skewer-mode
     scss-mode))
 
 ;; Get all the packages.
@@ -35,9 +34,11 @@
       (package-install package)))
 
 ;; Load up custom functions.
-(load-file "~/.emacs.d/elisp/functions.el")
-(load-file "~/.emacs.d/elisp/hooks.el")
-(load-file "~/.emacs.d/elisp/initialization.el")
+(dolist (file '("functions.el"
+                "hooks.el"
+                "keys.el"
+                "initialization.el"))
+  (load-file (concat "~/.emacs.d/elisp/" file)))
 
 ;; The most important part of this file.
 (load-theme 'zenburn t)
